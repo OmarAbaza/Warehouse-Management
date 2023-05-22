@@ -8,15 +8,16 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.Table;
-
+import javax.persistence.UniqueConstraint;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 
 @Entity
 @Data
-@Table(indexes = { @Index(name = "UniqueDevicePinCode", columnList = "status, sold, pinCode ASC", unique = true),
-		@Index(name = "UniqueDeviceSerialNumber", columnList = "serialNumber", unique = true) })
+@Table(indexes = { @Index(name = "DeviceStatusSoldPinCodeIndex", columnList = "status, sold, pinCode ASC", unique = true),
+		@Index(name = "UniqueDeviceSerialNumber", columnList = "serialNumber", unique = true) },
+		 uniqueConstraints = {@UniqueConstraint(name = "UniqueDevicePinCode", columnNames = {"pinCode"})})
 public class IotDevice {
 	@Id
 	@GeneratedValue

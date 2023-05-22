@@ -37,7 +37,7 @@ public class IotDeviceController {
 	public ResponseEntity<ResponseDto> getDeviceBySerialNumber(@RequestParam String serialNumber)
 			throws DeviceNotFoundException {
 		IotDeviceDto requestedIotDevice = iotDevicesService.getIotDeviceDetails(serialNumber);
-		return new ResponseEntity<ResponseDto>(
+		return new ResponseEntity<>(
 				new ResponseDto(true, ResponseStatusMessages.DEVICE_RETRIEVED_SUCCESSFULLY, requestedIotDevice),
 				HttpStatus.OK);
 	}
@@ -47,7 +47,7 @@ public class IotDeviceController {
 			throws DeviceNotFoundException {
 		IotDeviceDto requestedIotDevice = iotDevicesService.getIotDeviceStatus(serialNumber);
 		// omit extra data
-		return new ResponseEntity<ResponseDto>(
+		return new ResponseEntity<>(
 				new ResponseDto(true, ResponseStatusMessages.DEVICE_RETRIEVED_SUCCESSFULLY, requestedIotDevice),
 				HttpStatus.OK);
 	}
@@ -56,7 +56,7 @@ public class IotDeviceController {
 	public ResponseEntity<ResponseDto> createDevice(@RequestBody IotDeviceDto requestDTO)
 			throws DataValidationFailedException {
 		iotDevicesService.createIotDevice(requestDTO);
-		return new ResponseEntity<ResponseDto>(
+		return new ResponseEntity<>(
 				new ResponseDto(true, ResponseStatusMessages.DEVICE_ADDED_SUCCESSFULLY, null), HttpStatus.CREATED);
 	}
 
@@ -64,7 +64,7 @@ public class IotDeviceController {
 	public ResponseEntity<ResponseDto> updateDevice(@RequestBody IotDeviceDto requestDTO)
 			throws DataValidationFailedException, DeviceNotFoundException {
 		iotDevicesService.updateIotDevice(requestDTO);
-		return new ResponseEntity<ResponseDto>(
+		return new ResponseEntity<>(
 				new ResponseDto(true, ResponseStatusMessages.DEVICE_UPDATED_SUCCESSFULLY, null), HttpStatus.OK);
 	}
 
@@ -72,7 +72,7 @@ public class IotDeviceController {
 	public ResponseEntity<ResponseDto> patchDevice(@RequestBody IotDeviceDto requestDTO)
 			throws DataValidationFailedException, DeviceNotFoundException {
 		iotDevicesService.patchIotDevice(requestDTO);
-		return new ResponseEntity<ResponseDto>(
+		return new ResponseEntity<>(
 				new ResponseDto(true, ResponseStatusMessages.DEVICE_PATCHED_SUCCESSFULLY, null), HttpStatus.OK);
 	}
 
@@ -80,7 +80,7 @@ public class IotDeviceController {
 	public ResponseEntity<ResponseDto> deleteDevice(@RequestParam String pinCode)
 			throws DataValidationFailedException, DeviceNotFoundException {
 		iotDevicesService.deleteIotDevice(pinCode);
-		return new ResponseEntity<ResponseDto>(
+		return new ResponseEntity<>(
 				new ResponseDto(true, ResponseStatusMessages.DEVICE_DELETED_SUCCESSFULLY, null), HttpStatus.OK);
 	}
 
@@ -88,20 +88,20 @@ public class IotDeviceController {
 	public ResponseEntity<PaginatedResponseDto> getAllActiveDevices(@RequestParam(defaultValue = "0") Integer page,
 			@RequestParam(defaultValue = "20") int size) throws DeviceNotFoundException {
 		PaginatedResponseDto allActiveIotDevices = iotDevicesService.getAllActiveIotDevices(page, size);
-		return new ResponseEntity<PaginatedResponseDto>(allActiveIotDevices, HttpStatus.OK);
+		return new ResponseEntity<>(allActiveIotDevices, HttpStatus.OK);
 	}
 
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	@ExceptionHandler(DeviceNotFoundException.class)
 	public ResponseEntity<ResponseDto> handleDeviceNotFoundExceptions(DeviceNotFoundException ex) {
-		return new ResponseEntity<ResponseDto>(new ResponseDto(false, ResponseStatusMessages.DEVICE_NOT_FOUND, null),
+		return new ResponseEntity<>(new ResponseDto(false, ResponseStatusMessages.DEVICE_NOT_FOUND, null),
 				HttpStatus.NOT_FOUND);
 	}
 
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(DataValidationFailedException.class)
 	public ResponseEntity<ResponseDto> handleDataValidationExceptions(DataValidationFailedException ex) {
-		return new ResponseEntity<ResponseDto>(
+		return new ResponseEntity<>(
 				new ResponseDto(false, ResponseStatusMessages.DATA_VALIDATION_FAILED, ex.getValidationErrors()),
 				HttpStatus.BAD_REQUEST);
 	}
@@ -109,7 +109,7 @@ public class IotDeviceController {
 	@ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
 	@ExceptionHandler(HttpMessageNotReadableException.class)
 	public ResponseEntity<ResponseDto> handleInvalidFormatExceptions(HttpMessageNotReadableException ex) {
-		return new ResponseEntity<ResponseDto>(
+		return new ResponseEntity<>(
 				new ResponseDto(false, ResponseStatusMessages.INVALID_DATA, ex.getRootCause()),
 				HttpStatus.NOT_ACCEPTABLE);
 	}
@@ -118,7 +118,7 @@ public class IotDeviceController {
 	@ExceptionHandler(DataIntegrityViolationException.class)
 	public ResponseEntity<ResponseDto> handleDuplicateKeyExceptions(DataIntegrityViolationException ex) {
 		String conistraintName = ((ConstraintViolationException) ex.getCause()).getConstraintName().split("\\.")[1];
-		return new ResponseEntity<ResponseDto>(new ResponseDto(false,
+		return new ResponseEntity<>(new ResponseDto(false,
 				ResponseStatusMessages.valueOf(conistraintName + "_CONISTRAINT_DUBLICATE"), null),
 				HttpStatus.BAD_REQUEST);
 	}
@@ -127,7 +127,7 @@ public class IotDeviceController {
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ResponseDto> handleTechnicalExceptions(Exception ex) {
 		ex.printStackTrace();
-		return new ResponseEntity<ResponseDto>(new ResponseDto(false, ResponseStatusMessages.TECHNICAL_FAILURE, null),
+		return new ResponseEntity<>(new ResponseDto(false, ResponseStatusMessages.TECHNICAL_FAILURE, null),
 				HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
